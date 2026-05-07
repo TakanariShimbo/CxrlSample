@@ -99,15 +99,27 @@ cd ../phone
 - `MainActivity` でアプリマーケットに飛ばす対象 package を中国版 → グローバル版に変更
 - `AndroidManifest.xml` に `<queries>` で `com.rokid.sprite.global.aiapp` を可視化 (Android 11+ 必須)
 - 本家 `client-l:1.0.1` は `Caps` シリアライザ (`com.rokid.cxr.Caps`) を借りる目的でのみ依存に残置 (グラス側 APK との payload wire 互換のため)
+- リネーム (CxrGlobal / HelloToggleCxrl と同じ `com.example.*` 流儀に揃えた):
+  - applicationId / namespace / Kotlin パッケージ: `com.rokid.cxrlsample` → `com.example.cxrlsample.host`
+  - アプリ表示名 (`app_name`): `CXRLSample` → `CxrlSample Host`
+  - アプリ内ヘッダー (`screen_title_main`): `CXRLSample` → `CxrlSample Host`
+  - Compose Theme: `Theme.CXRLSample` / `CXRLSampleTheme` → `Theme.CxrlSampleHost` / `CxrlSampleHostTheme`
+  - Application クラス: `CXRLSampleApplication` → `CxrlSampleHostApplication`
+  - CustomApp で起動するグラス側パッケージ参照 (`CONSTANT.APP_PACKAGE_NAME`): `com.rokid.cxrswithcxrl` → `com.example.cxrlsample.client` (glass 側 applicationId に追従)
 
 ## glass (グラス側) の元サンプルからの改変点
 
-`MainActivity.kt` 内 Compose の中国語表示文字列 2 箇所を日本語に差し替えただけ。SDK 連携ロジックには手を入れていない。
+- `MainActivity.kt` 内 Compose の中国語表示文字列 2 箇所を日本語に差し替え (SDK 連携ロジックには手を入れていない):
 
-| 元 (中国語) | 改変 (日本語) |
-|---|---|
-| 这里是主页\n可以在这个页面测试自定义指令\n点击任意按键将向手机端发送键值信息 | ここはメインページです\nこの画面でカスタムコマンドをテストできます\n任意のキーを押すとスマホ側にキー情報を送信します |
-| 下边是来自手机端的自定义指令 | 以下はスマホ側から受信したカスタムコマンド |
+  | 元 (中国語) | 改変 (日本語) |
+  |---|---|
+  | 这里是主页\n可以在这个页面测试自定义指令\n点击任意按键将向手机端发送键值信息 | ここはメインページです\nこの画面でカスタムコマンドをテストできます\n任意のキーを押すとスマホ側にキー情報を送信します |
+  | 下边是来自手机端的自定义指令 | 以下はスマホ側から受信したカスタムコマンド |
+
+- リネーム (phone と揃え、`com.example.*` 流儀に統一):
+  - applicationId / namespace / Kotlin パッケージ: `com.rokid.cxrswithcxrl` → `com.example.cxrlsample.client`
+  - アプリ表示名 (`app_name`): `CXRSWithCXRL` → `CxrlSample Client`
+  - Compose Theme: `Theme.CXRSWithCXRL` / `CXRSWithCXRLTheme` → `Theme.CxrlSampleClient` / `CxrlSampleClientTheme`
 
 ## トラブルシューティング
 
