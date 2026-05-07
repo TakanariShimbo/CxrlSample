@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CXRLSample</string>
+    <string name="app_name">CxrlSample Host</string>
     <string name="title_activity_custom_app_type">CustomAppTypeActivity</string>
     <string name="title_activity_custom_view_type">CustomViewTypeActivity</string>
     <string name="title_activity_audio_usage">AudioUsageActivity</string>
@@ -12,7 +12,7 @@
     <string name="common_file_prefix">文件：%1$s</string>
     <string name="common_none">暂无</string>
     <string name="token_required_hint">请退出当前界面，并重新进入，以获取通信令牌。</string>
-    <string name="screen_title_main">CXRLSample</string>
+    <string name="screen_title_main">CxrlSample Host</string>
     <string name="screen_title_custom_app">自定义应用</string>
     <string name="screen_title_custom_view">自定义视图</string>
     <string name="screen_title_custom_cmd">自定义指令</string>

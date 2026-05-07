@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.rokid.cxrlsample"
+    namespace = "com.example.cxrlsample.host"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -12,7 +12,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.rokid.cxrlsample"
+        applicationId = "com.example.cxrlsample.host"
         minSdk = 31
         targetSdk = 36
         versionCode = 10000

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CXRLSample</string>
+    <string name="app_name">CxrlSample Host</string>
     <string name="title_activity_custom_app_type">CustomAppTypeActivity</string>
     <string name="title_activity_custom_view_type">CustomViewTypeActivity</string>
     <string name="title_activity_audio_usage">AudioUsageActivity</string>
@@ -12,7 +12,7 @@
     <string name="common_file_prefix">File: %1$s</string>
     <string name="common_none">None</string>
     <string name="token_required_hint">Please leave this page and enter again to obtain the communication token.</string>
-    <string name="screen_title_main">CXRLSample</string>
+    <string name="screen_title_main">CxrlSample Host</string>
     <string name="screen_title_custom_app">CustomAppType</string>
     <string name="screen_title_custom_view">CustomViewType</string>
     <string name="screen_title_custom_cmd">CustomCMD</string>
