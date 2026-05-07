@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.MANAGE_MEDIA" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+
+    <queries>
+        <package android:name="com.rokid.sprite.global.aiapp" />
+    </queries>
+
+    <application
+        android:name=".CXRLSampleApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.CXRLSample">
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+        <activity
+            android:name=".activities.photo.PhotoUsageActivity"
+            android:exported="false"
+            android:label="@string/screen_title_photo"
+            android:theme="@style/Theme.CXRLSample" />
+        <activity
+            android:name=".activities.customCMD.CustomCmdActivity"
+            android:exported="false"
+            android:label="@string/screen_title_custom_cmd"
+            android:theme="@style/Theme.CXRLSample" />
+        <activity
+            android:name=".activities.audio.AudioUsageActivity"
+            android:exported="false"
+            android:label="@string/screen_title_audio"
+            android:theme="@style/Theme.CXRLSample" />
+        <activity
+            android:name=".activities.customViewType.CustomViewTypeActivity"
+            android:exported="false"
+            android:label="@string/screen_title_custom_view"
+            android:theme="@style/Theme.CXRLSample" />
+        <activity
+            android:name=".activities.customAppType.CustomAppTypeActivity"
+            android:exported="false"
+            android:label="@string/screen_title_custom_app"
+            android:theme="@style/Theme.CXRLSample" />
+        <activity
+            android:name=".activities.main.MainActivity"
+            android:exported="true"
+            android:label="@string/screen_title_main"
+            android:theme="@style/Theme.CXRLSample">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
