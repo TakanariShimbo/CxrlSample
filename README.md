@@ -106,6 +106,7 @@ cd ../phone
   - Compose Theme: `Theme.CXRLSample` / `CXRLSampleTheme` → `Theme.CxrlSampleHost` / `CxrlSampleHostTheme`
   - Application クラス: `CXRLSampleApplication` → `CxrlSampleHostApplication`
   - CustomApp で起動するグラス側パッケージ参照 (`CONSTANT.APP_PACKAGE_NAME`): `com.rokid.cxrswithcxrl` → `com.example.cxrlsample.client` (glass 側 applicationId に追従)
+- バグ修正: CustomApp 画面で接続成立後にインストール状態を問い合わせていなかったため、グラス側に APK が残っていても画面再オープン毎に「未インストール」UI が出て再インストールを促していた。`CustomAppTypeViewModel` の接続フラグセッターで未接続→接続の遷移時に `checkApkInstalled()` (`cxrLink.appIsInstalled`) を1回呼ぶよう修正
 
 ## glass (グラス側) の元サンプルからの改変点
 

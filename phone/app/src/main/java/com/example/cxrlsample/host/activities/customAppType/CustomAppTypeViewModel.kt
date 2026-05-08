@@ -34,14 +34,20 @@ class CustomAppTypeViewModel : ViewModel() {
 
     private var isLConnected = false
         set(value) {
+            val wasConnected = _connectSuccess.value
             field = value
-            _connectSuccess.value = isBTConnected && value
+            val nowConnected = isBTConnected && value
+            _connectSuccess.value = nowConnected
+            if (!wasConnected && nowConnected) checkApkInstalled()
         }
 
     private var isBTConnected = false
         set(value) {
+            val wasConnected = _connectSuccess.value
             field = value
-            _connectSuccess.value = value && isLConnected
+            val nowConnected = value && isLConnected
+            _connectSuccess.value = nowConnected
+            if (!wasConnected && nowConnected) checkApkInstalled()
         }
 
     private val _appInstalled = MutableStateFlow(false)
