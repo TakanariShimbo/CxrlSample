@@ -19,9 +19,13 @@ import java.io.File
  *
  * Responsibilities:
  * 1) Create and maintain a CUSTOMAPP CXR session.
- * 2) Track connectivity, installation status, and app foreground state.
- * 3) Expose operations for install/uninstall/open/stop on the glasses side.
+ * 2) Track connectivity and installation status.
+ * 3) Expose install / uninstall operations.
  * 4) Publish the created [CXRLink] into Application scope for sub-pages to reuse.
+ *
+ * Note: glass 側 client app の起動/終了 (`appStart` / `appStop`) はこの画面ではなく
+ * [com.example.cxrlsample.host.activities.customCMD.CustomCmdViewModel] が
+ * Activity ライフサイクルに紐付けて管理する。
  */
 class CustomAppTypeViewModel : ViewModel() {
     private val tag = "CustomAppTypeViewModel"
@@ -56,13 +60,13 @@ class CustomAppTypeViewModel : ViewModel() {
     private val _installing = MutableStateFlow(false)
     val installing = _installing.asStateFlow()
 
-    private val _appOpened = MutableStateFlow(false)
-    val appOpened = _appOpened.asStateFlow()
-
     private lateinit var cxrLink: CXRLink
     private var appContext: Context? = null
 
-    // App-side lifecycle callback (install/uninstall/open/stop/query) from glasses runtime.
+    // この画面では install / uninstall / query のみを扱う。
+    // glass 側 client app の起動/終了 (appStart/appStop) は CustomCmdViewModel が
+    // Activity ライフサイクルに紐付けて管理する (Audio/Photo は client app 不要のため
+    // 親画面で scene を立ち上げる責務を持たない)。
     private val appCallback = object : IGlassAppCbk {
         override fun onInstallAppResult(p0: Boolean) {
             Log.d("CustomAppTypeViewModel", "onInstallAppResult: $p0")
@@ -77,32 +81,12 @@ class CustomAppTypeViewModel : ViewModel() {
 
         override fun onUnInstallAppResult(p0: Boolean) {
             Log.d("CustomAppTypeViewModel", "onUnInstallAppResult: $p0")
-
-        }
-
-        override fun onOpenAppResult(p0: Boolean) {
-            Log.d("CustomAppTypeViewModel", "onOpenAppResult: $p0")
-            _appOpened.value = p0
-        }
-
-        override fun onStopAppResult(p0: Boolean) {
-            Log.d("CustomAppTypeViewModel", "onStopAppResult: $p0")
-            _appOpened.value = !p0
-        }
-
-        override fun onGlassAppResume(p0: Boolean) {
-            Log.d("CustomAppTypeViewModel", "onGlassAppResume: $p0")
-            // SDK は launcher 等の不定状態を sentinel ("unknow") として送ってくる
-            // (Hi Rokid → AIDL 由来)。stop 時の遷移通知が遅延配送されて open 直後に
-            // false で届くと _appOpened を誤って戻すので、true への遷移だけ反映する。
-            if (p0) _appOpened.value = true
         }
 
         override fun onQueryAppResult(p0: Boolean) {
             Log.d("CustomAppTypeViewModel", "onQueryAppResult: $p0")
             _appInstalled.value = p0
         }
-
     }
 
     // Link is considered ready only when both CXR transport and Bluetooth are connected.
@@ -158,21 +142,6 @@ class CustomAppTypeViewModel : ViewModel() {
             (context.applicationContext as? CxrlSampleHostApplication)?.sharedCxrLink = cxrLink
             cxrLink.connect(it)
         }
-    }
-
-    /**
-     * Requests launching the app scene on the glasses side.
-     */
-    fun openApp() {
-        cxrLink.appStart("${CONSTANT.APP_PACKAGE_NAME}${CONSTANT.MAIN_PAGE}", appCallback)
-    }
-
-    /**
-     * Requests stopping the currently running app scene on glasses.
-     */
-    fun stopApp() {
-        cxrLink.appStop(appCallback)
-
     }
 
     /**

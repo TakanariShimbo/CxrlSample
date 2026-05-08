@@ -2,11 +2,13 @@ package com.example.cxrlsample.host.activities.customCMD
 
 import android.content.Context
 import android.util.Base64
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import com.example.cxrglobal.CXRLink
 import com.example.cxrglobal.callbacks.ICXRLinkCbk
 import com.example.cxrglobal.callbacks.ICustomCmdCbk
+import com.example.cxrglobal.callbacks.IGlassAppCbk
 // Caps は本家 SDK のシリアライザを Wire 互換のため引き続き使用 (グラス側 APK との payload 互換)。
 import com.rokid.cxr.Caps
 import com.example.cxrlsample.host.CxrlSampleHostApplication
@@ -24,6 +26,7 @@ import kotlinx.coroutines.flow.asStateFlow
  * 3) Send sample commands and parse response Caps payload for UI display.
  */
 class CustomCmdViewModel : ViewModel() {
+    private val tag = "CustomCmdViewModel"
     private var appContext: Context? = null
 
     private val _tokenGot = MutableStateFlow(false)
@@ -38,6 +41,9 @@ class CustomCmdViewModel : ViewModel() {
     private val _ready = MutableStateFlow(false)
     val ready = _ready.asStateFlow()
 
+    private val _appOpened = MutableStateFlow(false)
+    val appOpened = _appOpened.asStateFlow()
+
     private val _status = MutableStateFlow("")
     val status = _status.asStateFlow()
 
@@ -46,6 +52,28 @@ class CustomCmdViewModel : ViewModel() {
 
     private var count = 0
     private lateinit var cxrLink: CXRLink
+    private var sceneStarted = false
+
+    // CmdActivity のライフサイクルに glass 側 client app の起動/終了を紐付ける。
+    // Audio / Photo は SDK のトランスポート層で完結するため client app 不要だが、
+    // CustomCmd は client app の MAIN_PAGE がキー受信側となるので必須。
+    private val glassAppCallback = object : IGlassAppCbk {
+        override fun onOpenAppResult(success: Boolean) {
+            Log.d(tag, "onOpenAppResult: $success")
+            _appOpened.value = success
+        }
+
+        override fun onStopAppResult(success: Boolean) {
+            Log.d(tag, "onStopAppResult: $success")
+            _appOpened.value = !success
+        }
+
+        override fun onGlassAppResume(resume: Boolean) {
+            Log.d(tag, "onGlassAppResume: $resume")
+            // SDK の sentinel "unknow" 経由で false が誤発火するため true のみ反映 (CustomAppType と同じ理由)。
+            if (resume) _appOpened.value = true
+        }
+    }
 
     /**
      * Initializes screen state and binds callbacks for link and custom command events.
@@ -104,6 +132,13 @@ class CustomCmdViewModel : ViewModel() {
         })
         _ready.value = true
         _status.value = tr(R.string.custom_cmd_reuse_connection)
+        // glass 側 client app をこの画面のスコープで起動。Activity が destroy される
+        // ときに onCleared で appStop を呼んで終了させる。config change で init() が
+        // 再呼び出しされても sceneStarted フラグで二重起動を防ぐ。
+        if (!sceneStarted) {
+            cxrLink.appStart("${CONSTANT.APP_PACKAGE_NAME}${CONSTANT.MAIN_PAGE}", glassAppCallback)
+            sceneStarted = true
+        }
     }
 
     /**
@@ -113,7 +148,7 @@ class CustomCmdViewModel : ViewModel() {
      * during manual repeated tests.
      */
     fun sendMessage() {
-        if (!_available.value || !::cxrLink.isInitialized || !_ready.value) {
+        if (!_available.value || !::cxrLink.isInitialized || !_ready.value || !_appOpened.value) {
             return
         }
         cxrLink.sendCustomCmd("rk_custom_client", Caps().apply {
@@ -127,6 +162,14 @@ class CustomCmdViewModel : ViewModel() {
      */
     fun release() {
         _ready.value = false
+    }
+
+    override fun onCleared() {
+        if (sceneStarted && ::cxrLink.isInitialized) {
+            runCatching { cxrLink.appStop(glassAppCallback) }
+                .onFailure { Log.w(tag, "appStop on clear failed", it) }
+        }
+        super.onCleared()
     }
 
     /**

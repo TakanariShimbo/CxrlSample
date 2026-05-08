@@ -46,17 +46,12 @@
     <string name="custom_app_install_status">应用安装：%1$s</string>
     <string name="custom_app_install_ok">已安装</string>
     <string name="custom_app_install_not">未安装</string>
-    <string name="custom_app_scene_status">应用场景：%1$s</string>
-    <string name="custom_app_scene_opened">已打开</string>
-    <string name="custom_app_scene_closed">未打开</string>
     <string name="custom_app_wait_connection">等待眼镜连接成功。</string>
     <string name="custom_app_install_to_glasses">向眼镜端安装APP</string>
     <string name="custom_app_uninstall">卸载APP</string>
-    <string name="custom_app_open_scene">打开应用场景</string>
     <string name="custom_app_enter_cmd">进入自定义指令页面</string>
     <string name="custom_app_enter_audio">进入音频页面</string>
     <string name="custom_app_enter_photo">进入拍照页面</string>
-    <string name="custom_app_stop_scene">停止应用场景</string>
 
     <string name="custom_view_subtitle">自定义视图场景</string>
     <string name="custom_view_token_status">令牌状态：%1$s</string>
@@ -87,7 +82,7 @@
     <string name="custom_cmd_entry_custom_app">入口：CustomAppType</string>
     <string name="custom_cmd_entry_custom_view">入口：CustomViewType</string>
     <string name="custom_cmd_need_custom_app_connection">请先从 CustomAppType 建立连接。</string>
-    <string name="custom_cmd_connected_hint">已连接，请确保已在 CustomAppType 打开应用场景。</string>
+    <string name="custom_cmd_connected_hint">已连接。打开此页面期间，应用场景会自动启动。</string>
     <string name="common_service_not_connected">未连接眼镜服务。</string>
     <string name="common_bt_not_connected">蓝牙未连接，请先连接 Rokid 设备。</string>
     <string name="custom_cmd_reuse_connection">已复用现有连接。</string>

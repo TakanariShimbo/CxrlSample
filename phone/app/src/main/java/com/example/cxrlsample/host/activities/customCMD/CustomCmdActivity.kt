@@ -69,6 +69,7 @@ fun CustomCmdScreen(viewModel: CustomCmdViewModel) {
     val tokenGot by viewModel.tokenGot.collectAsState()
     val available by viewModel.available.collectAsState()
     val ready by viewModel.ready.collectAsState()
+    val appOpened by viewModel.appOpened.collectAsState()
     val status by viewModel.status.collectAsState()
     val entryLabel by viewModel.entryLabel.collectAsState()
     val from by viewModel.from.collectAsState()
@@ -105,7 +106,7 @@ fun CustomCmdScreen(viewModel: CustomCmdViewModel) {
             Button(
                 modifier = Modifier.fillMaxWidth(PRIMARY_BUTTON_WIDTH),
                 onClick = { viewModel.sendMessage() },
-                enabled = ready
+                enabled = ready && appOpened
             ) { Text(stringResource(id = R.string.custom_cmd_send)) }
         }
     }

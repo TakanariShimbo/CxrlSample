@@ -46,17 +46,12 @@
     <string name="custom_app_install_status">App install: %1$s</string>
     <string name="custom_app_install_ok">Installed</string>
     <string name="custom_app_install_not">Not installed</string>
-    <string name="custom_app_scene_status">App scene: %1$s</string>
-    <string name="custom_app_scene_opened">Opened</string>
-    <string name="custom_app_scene_closed">Not opened</string>
     <string name="custom_app_wait_connection">Waiting for glasses connection.</string>
     <string name="custom_app_install_to_glasses">Install APP to glasses</string>
     <string name="custom_app_uninstall">Uninstall APP</string>
-    <string name="custom_app_open_scene">Open app scene</string>
     <string name="custom_app_enter_cmd">Open custom command page</string>
     <string name="custom_app_enter_audio">Open audio page</string>
     <string name="custom_app_enter_photo">Open photo page</string>
-    <string name="custom_app_stop_scene">Stop app scene</string>
 
     <string name="custom_view_subtitle">Custom View Scenario</string>
     <string name="custom_view_token_status">Token status: %1$s</string>
@@ -87,7 +82,7 @@
     <string name="custom_cmd_entry_custom_app">Entry: CustomAppType</string>
     <string name="custom_cmd_entry_custom_view">Entry: CustomViewType</string>
     <string name="custom_cmd_need_custom_app_connection">Please establish connection from CustomAppType first.</string>
-    <string name="custom_cmd_connected_hint">Connected. Make sure app scene is opened in CustomAppType.</string>
+    <string name="custom_cmd_connected_hint">Connected. App scene starts automatically while this page is open.</string>
     <string name="common_service_not_connected">Glasses service is not connected.</string>
     <string name="common_bt_not_connected">Bluetooth is disconnected. Please connect Rokid device first.</string>
     <string name="custom_cmd_reuse_connection">Existing connection reused.</string>

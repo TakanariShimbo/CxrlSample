@@ -159,7 +159,6 @@ fun CustomAppTypeScreen(
     val tokenGot by viewModel.tokenGot.collectAsState()
     val connectSuccess by viewModel.connectSuccess.collectAsState()
     val appInstalled by viewModel.appInstalled.collectAsState()
-    val appOpened by viewModel.appOpened.collectAsState()
     val installing by viewModel.installing.collectAsState()
 
     SampleScreenShell(
@@ -185,12 +184,6 @@ fun CustomAppTypeScreen(
                     trueResId = R.string.custom_app_install_ok,
                     falseResId = R.string.custom_app_install_not,
                     condition = appInstalled
-                ),
-                booleanStatusLine(
-                    formatResId = R.string.custom_app_scene_status,
-                    trueResId = R.string.custom_app_scene_opened,
-                    falseResId = R.string.custom_app_scene_closed,
-                    condition = appOpened
                 )
             )
         )
@@ -211,34 +204,24 @@ fun CustomAppTypeScreen(
                 return@ActionButtonGroup
             }
 
+            // Installed: glass 側 client app の起動/終了は CustomCmd 画面側に
+            // 委ねるので、ここでは uninstall + サブページ遷移のみ提供する。
             Button(
                 modifier = Modifier.fillMaxWidth(PRIMARY_BUTTON_WIDTH),
                 onClick = { viewModel.uninstallApp() }
             ) { Text(stringResource(id = R.string.custom_app_uninstall)) }
-
-            if (!appOpened) {
-                Button(
-                    modifier = Modifier.fillMaxWidth(PRIMARY_BUTTON_WIDTH),
-                    onClick = { viewModel.openApp() }
-                ) { Text(stringResource(id = R.string.custom_app_open_scene)) }
-            } else {
-                Button(
-                    modifier = Modifier.fillMaxWidth(PRIMARY_BUTTON_WIDTH),
-                    onClick = toCustomCmd
-                ) { Text(stringResource(id = R.string.custom_app_enter_cmd)) }
-                Button(
-                    modifier = Modifier.fillMaxWidth(PRIMARY_BUTTON_WIDTH),
-                    onClick = toAudio
-                ) { Text(stringResource(id = R.string.custom_app_enter_audio)) }
-                Button(
-                    modifier = Modifier.fillMaxWidth(PRIMARY_BUTTON_WIDTH),
-                    onClick = toPhoto
-                ) { Text(stringResource(id = R.string.custom_app_enter_photo)) }
-                Button(
-                    modifier = Modifier.fillMaxWidth(PRIMARY_BUTTON_WIDTH),
-                    onClick = { viewModel.stopApp() }
-                ) { Text(stringResource(id = R.string.custom_app_stop_scene)) }
-            }
+            Button(
+                modifier = Modifier.fillMaxWidth(PRIMARY_BUTTON_WIDTH),
+                onClick = toCustomCmd
+            ) { Text(stringResource(id = R.string.custom_app_enter_cmd)) }
+            Button(
+                modifier = Modifier.fillMaxWidth(PRIMARY_BUTTON_WIDTH),
+                onClick = toAudio
+            ) { Text(stringResource(id = R.string.custom_app_enter_audio)) }
+            Button(
+                modifier = Modifier.fillMaxWidth(PRIMARY_BUTTON_WIDTH),
+                onClick = toPhoto
+            ) { Text(stringResource(id = R.string.custom_app_enter_photo)) }
         }
     }
 }
