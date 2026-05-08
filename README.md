@@ -107,6 +107,7 @@ cd ../phone
   - Application クラス: `CXRLSampleApplication` → `CxrlSampleHostApplication`
   - CustomApp で起動するグラス側パッケージ参照 (`CONSTANT.APP_PACKAGE_NAME`): `com.rokid.cxrswithcxrl` → `com.example.cxrlsample.client` (glass 側 applicationId に追従)
 - バグ修正: CustomApp 画面で接続成立後にインストール状態を問い合わせていなかったため、グラス側に APK が残っていても画面再オープン毎に「未インストール」UI が出て再インストールを促していた。`CustomAppTypeViewModel` の接続フラグセッターで未接続→接続の遷移時に `checkApkInstalled()` (`cxrLink.appIsInstalled`) を1回呼ぶよう修正
+- バグ修正: CustomApp の `Open app scene` ボタンを 1 回押しても `_appOpened` が即座に `false` に戻され、UI が次のサブページボタン群に遷移しない問題があった。原因は SDK の `onGlassAppResumeChange(from, to)` が launcher 等の不定状態を sentinel `"unknow"` (sic) で報告し、しかも stop 時の遷移通知が遅延配送されて `appStart` 直後に届くため。CxrGlobal はこれを愚直に翻訳して `onGlassAppResume(false)` を発火させるが、本家互換維持のためラッパーは触らず、`CustomAppTypeViewModel` 側で `onGlassAppResume` の `false` を反映しないよう変更 (`_appOpened` の真の信号源は `onOpenAppResult` / `onStopAppResult` の明示コールバックに絞る)
 
 ## glass (グラス側) の元サンプルからの改変点
 

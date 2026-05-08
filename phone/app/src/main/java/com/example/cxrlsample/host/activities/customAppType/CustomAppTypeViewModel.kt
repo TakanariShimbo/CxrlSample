@@ -92,7 +92,10 @@ class CustomAppTypeViewModel : ViewModel() {
 
         override fun onGlassAppResume(p0: Boolean) {
             Log.d("CustomAppTypeViewModel", "onGlassAppResume: $p0")
-            _appOpened.value = p0
+            // SDK は launcher 等の不定状態を sentinel ("unknow") として送ってくる
+            // (Hi Rokid → AIDL 由来)。stop 時の遷移通知が遅延配送されて open 直後に
+            // false で届くと _appOpened を誤って戻すので、true への遷移だけ反映する。
+            if (p0) _appOpened.value = true
         }
 
         override fun onQueryAppResult(p0: Boolean) {
